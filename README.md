@@ -176,5 +176,7 @@ Received a message: 9ef9f265-7681-42a1-8a55-d281ee01f232 count 8
 Received a message: 419b252b-7e4b-4b5a-9ac6-32230aa637a9 count 9
 ```
 
+Subsequent calls to `mvn exec:exec@SimpleProducerExample` will be visible in the consumer's console.
+
 
 
