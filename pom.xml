@@ -38,7 +38,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>SimpleProducerConsumerExample</id>
+                        <id>SimpleProducerExample</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -47,13 +47,12 @@
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
-                                <argument>com.thomsonreuters.innovation.SimpleProducerConsumerExample</argument>
+                                <argument>com.thomsonreuters.innovation.SimpleProducerExample</argument>
                             </arguments>
                         </configuration>
                     </execution>
-
                     <execution>
-                        <id>Broken</id>
+                        <id>SimpleConsumerExample</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -62,7 +61,7 @@
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
-                                <argument>com.thomsonreuters.innovation.Broken</argument>
+                                <argument>com.thomsonreuters.innovation.SimpleConsumerExample</argument>
                             </arguments>
                         </configuration>
                     </execution>

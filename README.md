@@ -26,16 +26,24 @@ kafka-server-start config/server.properties
 
 This will start a single node Kafka cluster, watch those logs fly!
 
-Run a quick producer / consumer from this project in java
+Now produce some messages to a topic
+
+First of all compile the project
 
 ```
-mvn clean compile exec:exec@SimpleProducerConsumerExample
+mvn clean compile
 ```
 
-This will output something like:
+The send some messages to the topic
 
 ```
-Apr 01, 2016 11:43:28 AM org.apache.kafka.common.config.AbstractConfig logAll
+mvn exec:exec@SimpleProducerExample
+```
+
+Output should be something like:
+
+```
+Apr 01, 2016 2:03:39 PM org.apache.kafka.common.config.AbstractConfig logAll
 INFO: ProducerConfig values:
 	compression.type = none
 	metric.reporters = []
@@ -85,15 +93,26 @@ INFO: ProducerConfig values:
 	send.buffer.bytes = 131072
 	linger.ms = 0
 
-Apr 01, 2016 11:43:29 AM org.apache.kafka.common.utils.AppInfoParser$AppInfo <init>
+Apr 01, 2016 2:03:39 PM org.apache.kafka.common.utils.AppInfoParser$AppInfo <init>
 INFO: Kafka version : 0.9.0.1
-Apr 01, 2016 11:43:29 AM org.apache.kafka.common.utils.AppInfoParser$AppInfo <init>
+Apr 01, 2016 2:03:39 PM org.apache.kafka.common.utils.AppInfoParser$AppInfo <init>
 INFO: Kafka commitId : 23c69d62a0cabf06
-Sent the following number of messages: 10
-Apr 01, 2016 11:43:29 AM org.apache.kafka.clients.producer.KafkaProducer close
+Completed Successfully, sent: 10
+Apr 01, 2016 2:03:40 PM org.apache.kafka.clients.producer.KafkaProducer close
 INFO: Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms.
+```
+
+Start the simple consumer which will get those messages and then await more messages until shutdown.
+
+```
+mvn exec:exec@SimpleConsumerExample
+```
+
+Which should yield
+
+```
 Received the following messages
-Apr 01, 2016 11:43:29 AM org.apache.kafka.common.config.AbstractConfig logAll
+Apr 01, 2016 2:08:27 PM org.apache.kafka.common.config.AbstractConfig logAll
 INFO: ConsumerConfig values:
 	metric.reporters = []
 	metadata.max.age.ms = 300000
@@ -141,19 +160,21 @@ INFO: ConsumerConfig values:
 	send.buffer.bytes = 131072
 	auto.offset.reset = latest
 
-Apr 01, 2016 11:43:29 AM org.apache.kafka.common.utils.AppInfoParser$AppInfo <init>
+Apr 01, 2016 2:08:27 PM org.apache.kafka.common.utils.AppInfoParser$AppInfo <init>
 INFO: Kafka version : 0.9.0.1
-Apr 01, 2016 11:43:29 AM org.apache.kafka.common.utils.AppInfoParser$AppInfo <init>
+Apr 01, 2016 2:08:27 PM org.apache.kafka.common.utils.AppInfoParser$AppInfo <init>
 INFO: Kafka commitId : 23c69d62a0cabf06
-d2bd1db2-b30a-4ea8-9da1-58a19fae1f03 count 0
-97ebffd7-0a02-46e3-9382-4e29a974c638 count 1
-0ec56e9d-11e8-4d00-aae9-2b923c3d648d count 2
-8bc7d6ff-06d4-4b99-ab87-23bcf1405f73 count 3
-5f4871b1-2eb0-42a2-9204-97e078234eeb count 4
-39d8ee60-6c5d-44d4-a9df-59dc8e5e3fc5 count 5
-6a44188f-49b6-489b-915c-72c824a98f3e count 6
-808f9c21-fe4e-481f-b61d-89071ed92e26 count 7
-466fc3a3-5b7c-43e3-92a3-ff828e900abe count 8
-7a26d66f-7a88-4024-aaa0-c77e9dc82e0d count 9
+Received a message: ed617cb1-0a27-4b07-bcdf-847d0f06bd48 count 0
+Received a message: 9e5d490b-ce60-436f-b5b9-f2de9eea0316 count 1
+Received a message: e01408e3-eb8d-4074-9212-fa189e97b7fd count 2
+Received a message: 7acdbf95-a182-437a-8def-0ee4191315cf count 3
+Received a message: af54cd8b-c128-4ac8-ab49-6386f7a573bd count 4
+Received a message: d30160c2-5297-4018-b8ed-1269e24a954f count 5
+Received a message: 2e50114d-ce05-408c-ba6e-ece72f27b963 count 6
+Received a message: 8b520771-c90a-4f83-ba8c-de0e79c9e025 count 7
+Received a message: 9ef9f265-7681-42a1-8a55-d281ee01f232 count 8
+Received a message: 419b252b-7e4b-4b5a-9ac6-32230aa637a9 count 9
 ```
+
+
 
