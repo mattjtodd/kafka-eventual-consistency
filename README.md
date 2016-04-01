@@ -13,13 +13,13 @@ brew install kafka
 This will also install all dependencies, like [Zookeeper] (https://zookeeper.apache.org) which is required to run the server.
 
 ```
-zkserver start
+zookeeper-server-start config/zookeeper.properties
 ```
 
 This will start zookeeper.
 
 ```
-kafka-server-start /usr/local/etc/kafka/server.properties
+kafka-server-start config/server.properties
 ```
 
 This will start a single node Kafka cluster, watch those logs fly!
