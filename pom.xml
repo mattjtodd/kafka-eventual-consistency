@@ -11,6 +11,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <kafka.groupId>consumer</kafka.groupId>
+        <kafka.topic>global.topic</kafka.topic>
     </properties>
 
     <build>
@@ -43,7 +45,6 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>java</executable>
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
@@ -57,15 +58,21 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>java</executable>
                             <arguments>
                                 <argument>-classpath</argument>
                                 <classpath/>
                                 <argument>com.thomsonreuters.innovation.SimpleConsumerExample</argument>
+                                <argument>-groupId</argument>
+                                <argument>${kafka.groupId}</argument>
+                                <argument>-topic</argument>
+                                <argument>${kafka.topic}</argument>
                             </arguments>
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <executable>java</executable>
+                </configuration>
             </plugin>
         </plugins>
 
@@ -82,6 +89,12 @@
         <dependency>
             <groupId>io.javaslang</groupId>
             <artifactId>javaslang</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.searchbox</groupId>
+            <artifactId>jest</artifactId>
             <version>2.0.2</version>
         </dependency>
 

@@ -29,7 +29,7 @@ public class SimpleProducerExample {
                 .sequence(executorService, Stream
                     .range(0, 10)
                     .map(value -> UUID.randomUUID().toString() + " count " + value)
-                    .map(value -> new ProducerRecord<String, String>("mytopic", value))
+                    .map(value -> new ProducerRecord<>("mytopic", "key", value))
                     .map(record -> fromJavaFuture(executorService, producer.send(record))))
                 .onFailure(Throwable::printStackTrace)
                 .onSuccess(sequence -> System.out.println("Completed Successfully, sent: " + sequence.size()))

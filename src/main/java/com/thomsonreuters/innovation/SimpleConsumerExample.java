@@ -5,13 +5,20 @@
  */
 package com.thomsonreuters.innovation;
 
-import javaslang.collection.Stream;
+import io.searchbox.client.JestClient;
+import io.searchbox.client.JestClientFactory;
+import io.searchbox.client.config.HttpClientConfig;
+import io.searchbox.core.Index;
+import javaslang.Tuple2;
+import javaslang.control.Try;
 import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.thomsonreuters.innovation.KafkaResources.kafkaConsumer;
+import static com.thomsonreuters.innovation.KafkaResources.poll;
 
 /**
  * Very simple consumer of a topic 'mytopic'.  Creates an infinite stream over a poll operation and then outputs all
@@ -19,15 +26,30 @@ import static com.thomsonreuters.innovation.KafkaResources.kafkaConsumer;
  */
 public class SimpleConsumerExample {
     public static void main(String[] args) {
-        System.out.println("Received the following messages");
 
-        try (Consumer<String, String> consumer = kafkaConsumer()) {
+        JestClientFactory factory = new JestClientFactory();
+        factory.setHttpClientConfig(
+            new HttpClientConfig.Builder("http://localhost:9200")
+                .multiThreaded(true)
+                .build());
+
+        JestClient client = factory.getObject();
+
+        String groupId = "elastic-search";
+        try (Consumer<String, String> consumer = kafkaConsumer("postgres")) {
             consumer.subscribe(Collections.singletonList("mytopic"));
-            Stream
-                .continually(() -> consumer.poll(100))
-                .flatMap(Stream::ofAll)
-                .map(ConsumerRecord::value)
-                .forEach(record -> System.out.println("Received a message: " + record));
+            poll(consumer, 100)
+                .map(record -> new Tuple2<>(record.key(), record.value()))
+                .forEach(record -> index(record._1() + record._2(), client));
         }
+    }
+
+    private static void index(String message, JestClient client) {
+        Map<String, String> source = new LinkedHashMap<>();
+        source.put("message", message);
+
+        Index index = new Index.Builder(source).index("messages").type("message").build();
+        Try.run(() -> client.execute(index))
+            .onFailure(Throwable::printStackTrace);
     }
 }
