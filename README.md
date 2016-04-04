@@ -1,4 +1,4 @@
-# Using CQRS and Event Sourcing for Multiple Persistence Sink Eventual Consistency
+# Using Kafka for Multiple Persistence Sink & Eventual Consistency
 
 ### Installing and starting Kafka (Instructions for OSX only :))
 
