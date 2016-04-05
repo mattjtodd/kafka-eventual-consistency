@@ -12,10 +12,11 @@ import io.searchbox.core.Index;
 import javaslang.Tuple2;
 import javaslang.control.Try;
 import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.common.TopicPartition;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static com.thomsonreuters.innovation.KafkaResources.kafkaConsumer;
 import static com.thomsonreuters.innovation.KafkaResources.poll;
@@ -36,7 +37,8 @@ public class SimpleConsumerExample {
         JestClient client = factory.getObject();
 
         try (Consumer<String, String> consumer = kafkaConsumer("postgres")) {
-            consumer.subscribe(Collections.singletonList("mytopic"));
+            Set<TopicPartition> assignment = consumer.assignment();
+            consumer.seekToBeginning(assignment.toArray(new TopicPartition[assignment.size()]));
             poll(consumer, 100)
                 .map(record -> new Tuple2<>(record.key(), record.value()))
                 .forEach(record -> index(record._1() + record._2(), client));
