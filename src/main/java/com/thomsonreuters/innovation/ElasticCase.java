@@ -8,6 +8,8 @@ package com.thomsonreuters.innovation;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.util.Date;
+
 @Document(indexName = "case", type = "case", shards = 1, replicas = 0, refreshInterval = "-1")
 public class ElasticCase {
     @org.springframework.data.annotation.Id
@@ -17,7 +19,11 @@ public class ElasticCase {
 
     private String name;
 
-    ElasticCase() {}
+    private Date timestamp;
+
+    ElasticCase() {
+
+    }
 
     public ElasticCase(String eventId, String name) {
         this.id = eventId;
@@ -43,6 +49,14 @@ public class ElasticCase {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     @Override

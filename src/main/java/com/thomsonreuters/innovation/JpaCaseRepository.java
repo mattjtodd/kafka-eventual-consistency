@@ -7,7 +7,6 @@ package com.thomsonreuters.innovation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
 
 @RepositoryRestResource(collectionResourceRel = "cases", path = "jpa-cases")
 public interface JpaCaseRepository extends JpaRepository<JpaCase, Long> {

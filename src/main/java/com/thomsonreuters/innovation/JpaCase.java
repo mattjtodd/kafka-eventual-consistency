@@ -9,6 +9,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class JpaCase {
@@ -19,6 +20,8 @@ public class JpaCase {
 
     private String name;
 
+    private Date timestamp;
+
     JpaCase() {
         // for hibernate
     }
@@ -27,6 +30,7 @@ public class JpaCase {
         this.id = eventId;
         this.eventId = id;
         this.name = name;
+        timestamp = new Date();
     }
 
     @Id
@@ -52,6 +56,14 @@ public class JpaCase {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     @Override

@@ -1,7 +1,7 @@
 $(document).foundation();
 
 $(document).ready(function () {
-    // do endoint1 get results      
+    // do endoint1 get results
     var resultsEndpoint1 = [{
         caseId: "1",
         name: {
@@ -45,11 +45,8 @@ $(document).ready(function () {
             dataToRender.forEach(function (result) {
                 var resultHolder = document.createElement("div");
                 resultHolder.classList.add("result");
-                var innerHtml = "<span title='Case Id'>" + result.caseId + "</span><br/>";
-                innerHtml += "<span title='Name'>" + result.name.firstName + " " + result.name.lastName + "</span><br/>";
-                innerHtml += "<span title='Group'>" + result.group.groupName + "</span><br/>";
-                innerHtml += "<span title='Username'>" + result.user.userName + "</span><br/>";
-                innerHtml += "<span title='Updated'>" + result.updateDate + "</span><br/>";
+                var innerHtml = "<span title='Case Id'>" + result.eventId + "</span><br/>";
+                innerHtml += "<span title='Name'>" + result.name + "</span><br/>";
                 resultHolder.innerHTML = innerHtml;
                 nodeToInsertTo.appendChild(resultHolder);
             });
@@ -62,11 +59,8 @@ $(document).ready(function () {
             dataToRender.forEach(function (result) {
                 var resultHolder = document.createElement("div");
                 resultHolder.classList.add("result");
-                var innerHtml = "<span title='Case Id'>" + result.caseId + "</span><br/>";
-                innerHtml += "<span title='Name'>" + result.name.firstName + " " + result.name.lastName + "</span><br/>";
-                innerHtml += "<span title='Group'>" + result.group.groupName + "</span><br/>";
-                innerHtml += "<span title='Username'>" + result.user.userName + "</span><br/>";
-                innerHtml += "<span title='Updated'>" + result.updateDate + "</span><br/>";
+                var innerHtml = "<span title='Case Id'>" + result.eventId + "</span><br/>";
+                innerHtml += "<span title='Name'>" + result.name + "</span><br/>";
                 resultHolder.innerHTML = innerHtml;
                 nodeToInsertTo.appendChild(resultHolder);
             });
@@ -77,20 +71,24 @@ $(document).ready(function () {
     function callEndpoint1(dataToSearchOn) {
         return new Promise(function (resolve) {
             $.ajax({
-                method: "POST",
-                url: "/something/to/send/somewhere",
-                data: { searchTerm: dataToSearchOn }
+                method: "GET",
+                url: "/jpa-cases"
             })
-                .done(function (msg) {
-                    resolve(msg);
-                });
+            .done(function (msg) {
+                resolve(msg._embedded.cases);
+            });
         });
     }
 
     function callEndpoint2(dataToSearchOn) {
         return new Promise(function (resolve) {
-            // This would follow the same format as the above
-            resolve(resultsEndpoint1);
+            $.ajax({
+                  method: "GET",
+                  url: "/elastic-cases"
+              })
+              .done(function (msg) {
+                  resolve(msg._embedded.cases);
+              });
         });
     }
 

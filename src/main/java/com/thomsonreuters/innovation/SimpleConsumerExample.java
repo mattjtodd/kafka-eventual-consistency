@@ -6,13 +6,17 @@
 package com.thomsonreuters.innovation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javaslang.Tuple2;
 import javaslang.control.Try;
+import org.apache.commons.cli.*;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.Collections;
+import java.util.Properties;
 
 import static com.thomsonreuters.innovation.KafkaResources.kafkaConsumer;
 import static com.thomsonreuters.innovation.KafkaResources.poll;
@@ -22,22 +26,41 @@ import static com.thomsonreuters.innovation.KafkaResources.poll;
  * of the messages returned.
  */
 public class SimpleConsumerExample {
-    public static void main(String[] args) {
+
+    private static final String PROPERTIES = "properties";
+
+    public static void main(String[] args) throws ParseException, IOException, ClassNotFoundException {
+
+        Options options = new Options();
+        options.addOption(Option.builder(PROPERTIES).required().hasArg().type(String.class).build());
+
+        CommandLine commandLine = new DefaultParser().parse(options, args);
+
+        String propertiesPath = commandLine.getOptionValue(PROPERTIES);
+        Properties properties = new Properties();
+        properties.load(SimpleConsumerExample.class.getClassLoader().getResourceAsStream(propertiesPath));
 
         RestOperations operations = new RestTemplate();
         ObjectMapper objectMapper = new ObjectMapper();
 
-        try (Consumer<String, String> consumer = kafkaConsumer("elastic-search-1")) {
-            consumer.subscribe(Collections.singletonList("NewTest"));
+        String topic = (String) properties.get("topic");
+        String groupId = (String) properties.get("groupId");
+        String sink = (String) properties.get("sink");
+        String klassName = (String) properties.get("payloadClass");
+        Class<?> klass = Class.forName(klassName);
+
+        try (Consumer<String, String> consumer = kafkaConsumer(groupId)) {
+            consumer.subscribe(Collections.singletonList(topic));
             poll(consumer, 100)
-                .forEach(record -> index(record, operations, objectMapper));
+                .forEach(record -> index(record, operations, objectMapper, sink, klass));
         }
     }
 
-    private static void index(ConsumerRecord<String, String> record, RestOperations restOperations, ObjectMapper objectMapper) {
-        System.out.println("Handling..................");
-        Try.of(() -> objectMapper.readValue(record.value(), JpaCase.class))
-            .onSuccess(jpaCase -> restOperations.postForObject("http://localhost:8080/elastic-cases", jpaCase, JpaCase.class));
+    private static void index(ConsumerRecord<String, String> record, RestOperations restOperations, ObjectMapper objectMapper,
+                              String url, Class<?> klass) {
+        Try.of(() -> objectMapper.readValue(record.value(), klass))
+            .onSuccess(kase -> restOperations.postForObject(url, kase, klass))
+            .onFailure(Throwable::printStackTrace);
 
     }
 }
