@@ -1,0 +1,59 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search term</title>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h1>Case Search</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h3>Search Term</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-9 columns">
+            <div class="large-12 columns">
+                <form>
+                    <input type="text" placeholder="e.g. CASE2" id="searchQuery" />
+                </form>
+            </div>
+        </div>
+        <div class="large-3 columns">
+            <a href="#" class="primary button" id="searchbutton">Search</a>
+            <br/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h3>Results</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="small-6 large-6 columns" id="endpoint1resultHolder"></div>
+        <div class="small-6 large-6 columns" id="endpoint2resultHolder"></div>
+    </div>
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
