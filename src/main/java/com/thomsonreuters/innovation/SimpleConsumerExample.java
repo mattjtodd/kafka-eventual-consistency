@@ -35,7 +35,6 @@ public class SimpleConsumerExample {
 
         JestClient client = factory.getObject();
 
-        String groupId = "elastic-search";
         try (Consumer<String, String> consumer = kafkaConsumer("postgres")) {
             consumer.subscribe(Collections.singletonList("mytopic"));
             poll(consumer, 100)
