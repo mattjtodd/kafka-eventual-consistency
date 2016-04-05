@@ -5,29 +5,41 @@
  */
 package com.thomsonreuters.innovation;
 
-import javax.persistence.Basic;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
 public class JpaCase {
-    @Id
+    @org.springframework.data.annotation.Id
     private String id;
 
-    @Basic(optional = false)
+    private String eventId;
+
     private String name;
 
     JpaCase() {
         // for hibernate
     }
 
-    public JpaCase(String id, String name) {
-        this.id = id;
+    public JpaCase(String eventId, String name) {
+        this.id = eventId;
+        this.eventId = id;
         this.name = name;
     }
 
+    @Id
     public String getId() {
         return id;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public String getName() {
@@ -36,5 +48,14 @@ public class JpaCase {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }

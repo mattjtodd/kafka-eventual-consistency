@@ -5,18 +5,14 @@
  */
 package com.thomsonreuters.innovation;
 
-import io.searchbox.client.JestClient;
-import io.searchbox.client.JestClientFactory;
-import io.searchbox.client.config.HttpClientConfig;
-import io.searchbox.core.Index;
-import javaslang.Tuple2;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javaslang.control.Try;
 import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.Collections;
 
 import static com.thomsonreuters.innovation.KafkaResources.kafkaConsumer;
 import static com.thomsonreuters.innovation.KafkaResources.poll;
@@ -28,29 +24,20 @@ import static com.thomsonreuters.innovation.KafkaResources.poll;
 public class SimpleConsumerExample {
     public static void main(String[] args) {
 
-        JestClientFactory factory = new JestClientFactory();
-        factory.setHttpClientConfig(
-            new HttpClientConfig.Builder("http://localhost:9200")
-                .multiThreaded(true)
-                .build());
+        RestOperations operations = new RestTemplate();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        JestClient client = factory.getObject();
-
-        try (Consumer<String, String> consumer = kafkaConsumer("postgres")) {
-            Set<TopicPartition> assignment = consumer.assignment();
-            consumer.seekToBeginning(assignment.toArray(new TopicPartition[assignment.size()]));
+        try (Consumer<String, String> consumer = kafkaConsumer("elastic-search-1")) {
+            consumer.subscribe(Collections.singletonList("NewTest"));
             poll(consumer, 100)
-                .map(record -> new Tuple2<>(record.key(), record.value()))
-                .forEach(record -> index(record._1() + record._2(), client));
+                .forEach(record -> index(record, operations, objectMapper));
         }
     }
 
-    private static void index(String message, JestClient client) {
-        Map<String, String> source = new LinkedHashMap<>();
-        source.put("message", message);
+    private static void index(ConsumerRecord<String, String> record, RestOperations restOperations, ObjectMapper objectMapper) {
+        System.out.println("Handling..................");
+        Try.of(() -> objectMapper.readValue(record.value(), JpaCase.class))
+            .onSuccess(jpaCase -> restOperations.postForObject("http://localhost:8080/elastic-cases", jpaCase, JpaCase.class));
 
-        Index index = new Index.Builder(source).index("messages").type("message").build();
-        Try.run(() -> client.execute(index))
-            .onFailure(Throwable::printStackTrace);
     }
 }

@@ -5,6 +5,7 @@
  */
 package com.thomsonreuters.innovation;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 @Document(indexName = "case", type = "case", shards = 1, replicas = 0, refreshInterval = "-1")
@@ -12,13 +13,24 @@ public class ElasticCase {
     @org.springframework.data.annotation.Id
     private String id;
 
+    private String eventId;
+
     private String name;
 
     ElasticCase() {}
 
-    public ElasticCase(String id, String name) {
-        this.id = id;
+    public ElasticCase(String eventId, String name) {
+        this.id = eventId;
+        this.eventId = eventId;
         this.name = name;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public String getId() {
@@ -31,5 +43,10 @@ public class ElasticCase {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }
