@@ -102,7 +102,26 @@ Apr 01, 2016 2:03:40 PM org.apache.kafka.clients.producer.KafkaProducer close
 INFO: Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms.
 ```
 
-Start the simple consumer which will get those messages and then await more messages until shutdown.
+To start the simple consumer which will get those messages and then await more messages until shutdown.
+
+```
+brew install elasticsearch
+```
+
+After installation start elastic search server from bin directory under Elastic search installation location.
+To test elastic search run the following ```http://localhost:9200/``` from browser or using curl
+
+```
+./elasticsearch
+```
+
+The following url will retrieve all the messages from the elastic search index
+
+```
+http://localhost:9200/messages/_search?pretty=true&q=*:*
+```
+
+Then trigger the Kafka consumer,
 
 ```
 mvn exec:exec@SimpleConsumerExample
