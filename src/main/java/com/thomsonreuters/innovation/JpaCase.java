@@ -5,14 +5,11 @@
  */
 package com.thomsonreuters.innovation;
 
-import org.springframework.data.elasticsearch.annotations.Document;
-
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-@Document(indexName = "case", type = "case", shards = 1, replicas = 0, refreshInterval = "-1")
 public class JpaCase {
     @Id
     private String id;
