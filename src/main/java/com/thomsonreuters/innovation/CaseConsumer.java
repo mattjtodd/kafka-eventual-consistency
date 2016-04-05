@@ -6,7 +6,6 @@
 package com.thomsonreuters.innovation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javaslang.Tuple2;
 import javaslang.control.Try;
 import org.apache.commons.cli.*;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -25,7 +24,7 @@ import static com.thomsonreuters.innovation.KafkaResources.poll;
  * Very simple consumer of a topic 'mytopic'.  Creates an infinite stream over a poll operation and then outputs all
  * of the messages returned.
  */
-public class SimpleConsumerExample {
+public class CaseConsumer {
 
     private static final String PROPERTIES = "properties";
 
@@ -38,7 +37,7 @@ public class SimpleConsumerExample {
 
         String propertiesPath = commandLine.getOptionValue(PROPERTIES);
         Properties properties = new Properties();
-        properties.load(SimpleConsumerExample.class.getClassLoader().getResourceAsStream(propertiesPath));
+        properties.load(CaseConsumer.class.getClassLoader().getResourceAsStream(propertiesPath));
 
         RestOperations operations = new RestTemplate();
         ObjectMapper objectMapper = new ObjectMapper();

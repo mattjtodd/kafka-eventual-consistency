@@ -12,21 +12,17 @@ import java.util.Date;
 
 @Document(indexName = "case", type = "case", shards = 1, replicas = 0, refreshInterval = "-1")
 public class ElasticCase {
-    @org.springframework.data.annotation.Id
-    private String id;
 
+    @org.springframework.data.annotation.Id
     private String eventId;
 
     private String name;
-
-    private Date timestamp;
 
     ElasticCase() {
 
     }
 
     public ElasticCase(String eventId, String name) {
-        this.id = eventId;
         this.eventId = eventId;
         this.name = name;
     }
@@ -39,24 +35,12 @@ public class ElasticCase {
         this.eventId = eventId;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
     }
 
     @Override

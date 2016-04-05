@@ -13,29 +13,18 @@ import java.util.Date;
 
 @Entity
 public class JpaCase {
-    @org.springframework.data.annotation.Id
-    private String id;
-
+    @Id
     private String eventId;
 
     private String name;
-
-    private Date timestamp;
 
     JpaCase() {
         // for hibernate
     }
 
     public JpaCase(String eventId, String name) {
-        this.id = eventId;
-        this.eventId = id;
+        this.eventId = eventId;
         this.name = name;
-        timestamp = new Date();
-    }
-
-    @Id
-    public String getId() {
-        return id;
     }
 
     public String getEventId() {
@@ -52,18 +41,6 @@ public class JpaCase {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
     }
 
     @Override
