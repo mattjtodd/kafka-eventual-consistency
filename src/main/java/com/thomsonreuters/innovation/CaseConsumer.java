@@ -36,8 +36,7 @@ public class CaseConsumer {
 
         String topic = (String) properties.get("topic");
         String sink = (String) properties.get("sink");
-        String klassName = (String) properties.get("payloadClass");
-        Class<?> klass = Class.forName(klassName);
+        Class<?> aClass = Class.forName((String) properties.get("payloadClass"));
 
         try (Consumer<String, String> consumer = new KafkaConsumer<>(properties)) {
             consumer.subscribe(Collections.singletonList(topic));
@@ -45,8 +44,8 @@ public class CaseConsumer {
                 .continually(() -> consumer.poll(100))
                 .flatMap(Stream::ofAll)
                 .forEach(record ->
-                    Try.of(() -> objectMapper.readValue(record.value(), klass))
-                       .onSuccess(kase -> restOperations.postForObject(sink, kase, klass))
+                    Try.of(() -> objectMapper.readValue(record.value(), aClass))
+                       .onSuccess(aCase -> restOperations.postForObject(sink, aCase, aClass))
                        .onFailure(Throwable::printStackTrace)
                 );
         }
