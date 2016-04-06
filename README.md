@@ -37,15 +37,15 @@ mvn clean compile
 The send a message to a topic
 
 ```
-echo '{"id" : "8", "eventId" : "8", "name" : "Nigel"}' | kafka-console-producer --broker-list localhost:9092 --topic casemanager
+echo '{"eventId" : "8", "name" : "Cyril"}' | kafka-console-producer --broker-list localhost:9092 --topic casemanager
 ```
 
 ```
-mvn -Dkafka.groupId=jpa-cases -Dkafka.topic=casemanager exec:exec@SimpleConsumerExample
+mvn clean compile -Dproducer.properties=jpa-consumer.properties exec:exec@SimpleConsumerExample
 ```
 
 ```
-mvn -Dkafka.groupId=elastic-cases -Dkafka.topic=casemanager exec:exec@SimpleConsumerExample
+mvn clean compile -Dproducer.properties=elastic-consumer.properties exec:exec@SimpleConsumerExample
 ```
 
 
