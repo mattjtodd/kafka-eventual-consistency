@@ -26,27 +26,43 @@ kafka-server-start config/server.properties
 
 This will start a single node Kafka cluster, watch those logs fly!
 
-Now produce some messages to a topic
-
-First of all compile the project
+There's a spring boot app which contains both of the data sinks for the consumers to publish to which can be started by
 
 ```
-mvn clean compile
+mvn clean package spring-boot:run
 ```
 
-The send a message to a topic
+There's a very simple web based viewer for the contents of the two store which can be access via
+
+```
+http://localhost:8080
+```
+
+You'll need to click the `Search` button each time to get the latest results.
+
+To send a message to the topic named `casemanager`
 
 ```
 echo '{"eventId" : "8", "name" : "Cyril"}' | kafka-console-producer --broker-list localhost:9092 --topic casemanager
 ```
 
+This will put the json message into that topic ready for the consumers to pick off and populate the appropriate sinks.
+
+Start the JPA consumer using:
+
 ```
 mvn clean compile -Dproducer.properties=jpa-consumer.properties exec:exec@SimpleConsumerExample
 ```
 
+Once this is started if you re-run the search in the UI you should see the entry `Cyril` for the RDBMS column.
+
+Start the Elastic consumer using:
+
 ```
 mvn clean compile -Dproducer.properties=elastic-consumer.properties exec:exec@SimpleConsumerExample
 ```
+
+Again a re-run of the search will reveal that the Elastic sink has been populated with the same data.
 
 
 
